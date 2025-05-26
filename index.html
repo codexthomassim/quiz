@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz de Processos</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background-color: #f0f0f0;
+      }
+      #quiz-container {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: auto;
+      }
+      .question {
+        margin-bottom: 20px;
+      }
+      button {
+        margin: 5px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #4caf50;
+        color: white;
+        cursor: pointer;
+      }
+      #startBtn {
+        background-color: #2196f3;
+      }
+      #message {
+        margin-top: 20px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="quiz-container">
+      <button id="startBtn">Iniciar Teste</button>
+      <div id="question-box" style="display: none"></div>
+      <div id="message"></div>
+    </div>
+
+    <script>
+      const questions = [
+        {
+          text: "1. Quais são os fatores positivos para a empresa buscar novas oportunidades no mercado?",
+          options: ["Forças e Oportunidades", "Fronquezas e Ameaças"],
+          answer: 0,
+          explanation:
+            "Forças e oportunidades representam os pontos positivos e externos/internos da empresa.",
+        },
+        {
+          text: "2. Qual a hierarquia correta dos processos?",
+          options: [
+            "Macroprocesso > Processo > Subprocesso > Atividade > Tarefa",
+            "Macroprocesso > Subprocesso > Processo > Atividade > Tarefa",
+          ],
+          answer: 0,
+          explanation:
+            "Essa é a ordem correta dos elementos dentro da modelagem de processos.",
+        },
+        {
+          text: "3. Qual dos diagramas é utilizado para descrever os requisitos funcionais do sistema?",
+          options: ["Diagrama de Caso de Uso", "Diagrama de Objetos"],
+          answer: 0,
+          explanation:
+            "O Diagrama de Casos de Uso mostra as funcionalidades esperadas do sistema.",
+        },
+        {
+          text: "4. No BPMN, que símbolo representa quem realiza cada atividade dentro de uma pool?",
+          options: ["Lane", "Linha"],
+          answer: 0,
+          explanation:
+            "Lane (raia) é o símbolo usado para separar responsabilidades dentro da pool.",
+        },
+      ];
+
+      let currentQuestion = 0;
+      let score = 0;
+
+      const startBtn = document.getElementById("startBtn");
+      const questionBox = document.getElementById("question-box");
+      const message = document.getElementById("message");
+
+      startBtn.onclick = () => {
+        startBtn.style.display = "none";
+        questionBox.style.display = "block";
+        score = 0;
+        currentQuestion = 0;
+        showQuestion();
+      };
+
+      function showQuestion() {
+        message.innerHTML = "";
+        const q = questions[currentQuestion];
+        questionBox.innerHTML = `<div class="question">${q.text}</div>`;
+
+        q.options.forEach((opt, idx) => {
+          const btn = document.createElement("button");
+          btn.textContent = opt;
+          btn.onclick = () => handleAnswer(idx);
+          questionBox.appendChild(btn);
+        });
+      }
+
+      function handleAnswer(selected) {
+        const q = questions[currentQuestion];
+        questionBox.innerHTML = "";
+
+        if (selected === q.answer) {
+          message.textContent = "Parabéns, você acertou!";
+          score += 1;
+        } else {
+          message.textContent = `Errado. Justificativa: ${q.explanation}`;
+        }
+
+        setTimeout(() => {
+          message.textContent = "";
+          currentQuestion++;
+          if (currentQuestion < questions.length) {
+            setTimeout(showQuestion, 2000); // intervalo entre questões
+          } else {
+            showResult();
+          }
+        }, 2000);
+      }
+
+      function showResult() {
+        questionBox.innerHTML = "";
+        const percentage = score * 25;
+        message.textContent = `Você acertou ${percentage}% do teste.`;
+        startBtn.textContent = "Refazer Teste";
+        startBtn.style.display = "inline-block";
+      }
+    </script>
+  </body>
+</html>
